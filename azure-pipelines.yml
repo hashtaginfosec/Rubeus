@@ -43,7 +43,54 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: PowerShell@2
+  displayName: PowerShell Script for ConfuserEx
+  inputs:
+    targetType: inline
+    script: |
+      # make the confused folder
+      mkdir ConfuserEx
+      mkdir Confused
+      ls
 
+      # download specific ConfuserEx version
+      wget https://github.com/mkaring/ConfuserEx/releases/download/v1.6.0/ConfuserEx-CLI.zip -o ConfuserEx-CLI.zip
+      Expand-Archive .\ConfuserEx-CLI.zip -DestinationPath ConfuserEx
+      ls
+      ls ConfuserEx\
+
+      
+      # create confuser crpoj file
+      New-Item conf.crproj
+      Set-Content conf.crproj '<?xml version="1.0" encoding="utf-8"?>'
+      Add-Content conf.crproj '<project outputDir="Confused\" baseDir="" xmlns="http://confuser.codeplex.com">'
+      Add-Content conf.crproj '<rule preset="maximum" pattern="true">'
+      Add-Content conf.crproj '<protection id="anti debug" />'
+      Add-Content conf.crproj '<protection id="anti dump" />'
+      Add-Content conf.crproj '<protection id="anti ildasm" />'
+      Add-Content conf.crproj '<protection id="constants" />'
+      Add-Content conf.crproj '<protection id="ctrl flow" />'
+      Add-Content conf.crproj '<protection id="harden" />'
+      Add-Content conf.crproj '<protection id="invalid metadata" />'
+      Add-Content conf.crproj '<protection id="ref proxy" />'
+      Add-Content conf.crproj '<protection id="rename" >'
+      Add-Content conf.crproj '<argument name = "mode" value = "letters" />'
+      Add-Content conf.crproj '<argument name = "renPublic" value = "false" />'
+      Add-Content conf.crproj '<argument name = "renEnum" value = "true" />'
+      Add-Content conf.crproj '<argument name = "renameArgs" value = "false" />'
+      Add-Content conf.crproj '</protection >'
+      Add-Content conf.crproj '<protection id="watermark" action="remove" />'
+      Add-Content conf.crproj '<protection id="resources" />'
+      Add-Content conf.crproj '<protection id="typescramble" />'
+      Add-Content conf.crproj '<protection id="watermark" action="remove" />'
+      Add-Content conf.crproj '</rule>'
+      Add-Content conf.crproj "<module path='notRubeus\bin\Release\notRubeus.exe' />"
+      Add-Content conf.crproj "</project>"
+
+      # execute confuser on everything
+      Confuser.CLI.exe conf.crproj -n
+      ls Confused\
+      
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Pipeline.Workspace)'
