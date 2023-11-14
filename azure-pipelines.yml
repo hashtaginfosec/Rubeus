@@ -35,7 +35,7 @@ steps:
 
       ls
 
-      python.exe .\InvisibilityCloak.py -d Rubeus -n notRubeus -m base64
+      python.exe .\InvisibilityCloak.py -d . -n notRubeus -m base64
 
 - task: VSBuild@1
   inputs:
