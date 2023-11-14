@@ -21,7 +21,23 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: UsePythonVersion@0
+  displayName: 'Use Python 3.x'
+- task: PowerShell@2
+  displayName: PowerShell Script for InvisibilityCloak
+  inputs:
+    targetType: inline
+    script: |
+      wget https://raw.githubusercontent.com/xforcered/InvisibilityCloak/main/InvisibilityCloak.py -o InvisibilityCloak.py
+      wget https://raw.githubusercontent.com/RoxanaKovaci/Azure-pipelines/master/random-words.py -o words.py
 
+      pip3 install requests
+      pip3 install random
+
+      $folders = Get-ChildItem -Path ".\" -directory
+      foreach ($f in $folders) {$pos = $(python.exe .\words.py); python.exe .\InvisibilityCloak.py -d $f.FullName -n $pos -m reverse; echo "$f is now $pos" >> .\correlation.txt}
+
+      gc .\correlation.txt
 
 - task: VSBuild@1
   inputs:
