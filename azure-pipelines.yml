@@ -29,15 +29,13 @@ steps:
     targetType: inline
     script: |
       wget https://raw.githubusercontent.com/xforcered/InvisibilityCloak/main/InvisibilityCloak.py -o InvisibilityCloak.py
-      wget https://raw.githubusercontent.com/RoxanaKovaci/Azure-pipelines/master/random-words.py -o words.py
-
+      
       pip3 install requests
       pip3 install random
 
-      $folders = Get-ChildItem -Path ".\" -directory
-      foreach ($f in $folders) {$pos = $(python.exe .\words.py); python.exe .\InvisibilityCloak.py -d $f.FullName -n $pos -m reverse; echo "$f is now $pos" >> .\correlation.txt}
+      ls
 
-      gc .\correlation.txt
+      python.exe .\InvisibilityCloak.py -d Rubeus -n notRubeus -m base64
 
 - task: VSBuild@1
   inputs:
