@@ -28,10 +28,8 @@ steps:
     configuration: '$(buildConfiguration)'
 
 
-- task: DownloadPipelineArtifact@2
+- task: PublishPipelineArtifact@1
   inputs:
-    buildType: 'specific'
-    project: '002de0c8-6495-4a14-9e3b-719a7f6d7a9a'
-    definition: '1'
-    buildVersionToDownload: 'latest'
     targetPath: '$(Pipeline.Workspace)'
+    artifact: 'rubeus'
+    publishLocation: 'pipeline'
