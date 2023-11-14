@@ -21,6 +21,11 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'filePath'
+    scriptPath: 'https://raw.githubusercontent.com/h4wkst3r/InvisibilityCloak/main/InvisibilityCloak.py'
+    arguments: '-n notrubeus -d Rubeus -m base64'
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
