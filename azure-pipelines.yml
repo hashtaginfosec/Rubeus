@@ -88,7 +88,7 @@ steps:
       Add-Content conf.crproj "</project>"
 
       # execute confuser on everything
-      Confuser.CLI.exe conf.crproj -n
+      ConfuserEx\Confuser.CLI.exe conf.crproj -n
       ls Confused\
       
 - task: PublishPipelineArtifact@1
